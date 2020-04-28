@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>3D-Smile</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<link rel="stylesheet" href="css/index.css">
+	<link rel="stylesheet" href="css/animate.min.css">
+</head>
+
+<body>
+	<script src="js/jquery-3.4.1.min.js"></script>
+	<script src="js/three.js"></script>
+	<script src="js/d3-threeD.js"></script>
+	<script src="js/tween.min.js"></script>
+	<script src="js/TrackballControls.js"></script>
+	<script src="js/CSS3DRenderer.js"></script>
+
+	<div id="container">
+
+	</div>
+
+	<!-- <iframe id="iframe" class="animated" src="logo.html" frameborder="0" width="300" scrolling="No" height="200"
+		leftmargin="0" topmargin="0" allowtransparency="true"></iframe> -->
+
+	<div id="top" class="animated"></div>
+
+	<!-- <div id="left" class="animated"> 
+		<div id="leftText"></div>
+	</div>
+	<div id="right" class="animated">
+		<div id="ccbLogo"></div>
+		<div id="textbg_right"></div>
+		<div id="fiveG_bg"></div>
+	</div> -->
+
+	<div class="show_info animated" style="display:none;">
+		<div class="info_my">
+			<img id="info_my1" />
+		</div>
+	</div>
+
+	<script>
+		var fov = 40;
+		var personArray = new Array;
+		var CurPersonNum = 0;
+		// animate
+		var _in = 'zoomIn',
+			_out = 'zoomOut',
+			_topIn = 'bounceIn',
+			_topOut = 'bounceOut',
+			_rightIn = 'slideInRight',
+			_rightOut = 'slideOutRight',
+			_leftIn = 'slideInLeft',
+			_leftOut = 'slideOutLeft';
+
+		setTimeout(() => {
+			$("#right").css('display', 'block').removeClass(_rightOut).addClass(_rightIn);
+			$('#left').css('display', 'block').removeClass(_leftOut).addClass(_leftIn)
+		}, 5000)
+		// // 模拟推送数据
+		// var s = setInterval(function () {
+		// 	// get animate
+		// 	if (CurPersonNum >= personArray.length) {
+		// 		CurPersonNum = 0;
+		// 	}
+		// 	setTimeout(function () {
+		// 		// 更改展示的图片
+		// 		var img = document.getElementsByClassName('element')[CurPersonNum].getElementsByTagName(
+		// 			'img')[0];
+
+		// 		var ram = Math.floor((Math.random() * 10) + 1);
+		// 		img.setAttribute('src', 'img/' + ram + '.jpg');
+
+		// 		++CurPersonNum;
+		// 	}, 1000);
+		// }, 1000);
+
+		// 生成虚拟数据
+		$.ajax({
+			url: 'http://192.168.1.238:8080/WisdomBank/xlqiang/picmsg',
+			type: 'get',
+			dataType: 'json',
+			async: false,
+			success: function (data) {
+				var a = 0;
+				var num = data.returnData.length;
+				var num1 = parseInt(200 / num);
+				for (var j = 1; j <= num1; j++) {
+					for (var i = 0; i < num; i++) {
+						
+						personArray.push({
+							image: data.returnData[i].pic_path,
+							id:a++
+						});
+					}
+				}
+
+				// 模拟推送数据
+				var s = setInterval(function () {
+					// get animate
+					if (CurPersonNum >= personArray.length) {
+						CurPersonNum = 0;
+					}
+					setTimeout(function () {
+						// 更改展示的图片
+						var img = document.getElementsByClassName('element')[CurPersonNum]
+							.getElementsByTagName(
+								'img')[0];
+
+						var ram = Math.floor((Math.random() * num));
+						img.setAttribute('src', data.returnData[ram].pic_path);
+
+						++CurPersonNum;
+					}, 1000);
+				}, 1000);
+
+
+				var img_show = document.getElementById('info_my1');
+				var s = setInterval(function () {
+					var ram1 = Math.floor((Math.random() * num));
+					// get animate 动画
+					img_show.setAttribute('src', data.returnData[ram1].pic_path);
+
+					$('.show_info').show();
+					var num_show_ran_left = Math.floor(Math.random() * 1600 + 300) - 1000;
+					var num_show_ran_top = Math.floor(Math.random() * 45 + 10);
+					$('.show_info').css("left", num_show_ran_left + "px");
+					$('.show_info').css("top", num_show_ran_top + "%");
+					$('.show_info').addClass(_in);
+					setTimeout(function () {
+						$('.show_info').removeClass(_in);
+						setTimeout(function () {
+							$('.show_info').addClass(_out);
+							setTimeout(function () {
+								$('.show_info').removeClass(_out);
+								$('.show_info').hide();
+							}, 1000);
+						}, 4000);
+					}, 1000);
+				}, 7000);
+			}
+		})
+
+		var table = new Array;
+		for (var i = 0; i < personArray.length; i++) {
+			table[i] = new Object();
+			if (i < personArray.length) {
+				table[i] = personArray[i];
+				table[i].src = personArray[i].image;
+				table[i].id = personArray[i].id
+			}
+			table[i].p_x = i % 20 + 1;
+			table[i].p_y = Math.floor(i / 20) + 1;
+		}
+
+		var camera, scene, renderer;
+		var controls;
+
+		var objects = [];
+		var targets = {
+			table: [],
+			sphere: [],
+			helix: [],
+		};
+
+		init();
+		animate();
+
+
+		function init() {
+
+			camera = new THREE.PerspectiveCamera(fov, window.innerWidth / window.innerHeight, 1, 10000);
+			camera.position.z = 2500;
+
+			scene = new THREE.Scene();
+
+			// table
+			for (var i = 0; i < table.length; i++) {
+
+				var element = document.createElement('div');
+				element.className = 'element';
+				element.style.backgroundColor = 'rgba(0,127,127,' + (Math.random() * 0.5 + 0.25) + ')';
+
+				var img = document.createElement('img');
+				img.src = table[i].image;
+				element.appendChild(img);
+
+				var object = new THREE.CSS3DObject(element);
+				object.position.x = Math.random() * 4000 - 2000;
+				object.position.y = Math.random() * 4000 - 2000;
+				object.position.z = Math.random() * 4000 - 2000;
+				scene.add(object);
+
+				objects.push(object);
+
+				// 表格需要坐标进行排序的
+				var object = new THREE.Object3D();
+				// object.position.x = ( table[ i + 3 ] * 140 ) - 1330;
+				// object.position.y = - ( table[ i + 4 ] * 180 ) + 990;
+				object.position.x = (table[i].p_x * 140) - 1330;
+				object.position.y = -(table[i].p_y * 180) + 990;
+
+				targets.table.push(object);
+
+			}
+
+			// sphere
+			// var vector = new THREE.Vector3();
+			// var spherical = new THREE.Spherical();
+
+			// for (var i = 0, l = objects.length; i < l; i++) {
+
+			// 	var phi = Math.acos(-1 + (2 * i) / l);
+			// 	var theta = Math.sqrt(l * Math.PI) * phi;
+
+			// 	var object = new THREE.Object3D();
+
+			// 	spherical.set(800, phi, theta);
+
+			// 	object.position.setFromSpherical(spherical);
+
+			// 	vector.copy(object.position).multiplyScalar(2);
+
+			// 	object.lookAt(vector);
+			// 	targets.sphere.push(object);
+
+			// }
+			for (var i = 0; i < objects.length; i++) {
+
+				var object = new THREE.Object3D();
+
+				object.position.x = ((i % 5) * 400) - 800; // 400 图片的左右间距  800 x轴中心店
+				object.position.y = (-(Math.floor(i / 5) % 5) * 300) + 500; // 500 y轴中心店
+				object.position.z = (Math.floor(i / 25)) * 200 - 800; // 300调整 片间距 800z轴中心店
+
+				targets.sphere.push(object);
+
+			}
+
+
+			// helix
+			var vector = new THREE.Vector3();
+			var cylindrical = new THREE.Cylindrical();
+
+			for (var i = 0, l = objects.length; i < l; i++) {
+
+				var theta = i * 0.175 + Math.PI;
+				var y = -(i * 5 - 400);
+
+				var object = new THREE.Object3D();
+
+				// 参数一 圈的大小 参数二 左右间距 参数三 上下间距
+				cylindrical.set(1100, theta, y);
+
+				object.position.setFromCylindrical(cylindrical);
+
+				vector.x = object.position.x * 2;
+				vector.y = object.position.y;
+				vector.z = object.position.z * 2;
+
+				object.lookAt(vector);
+
+				targets.helix.push(object);
+
+			}
+
+			//渲染
+			renderer = new THREE.CSS3DRenderer({
+				antialias: true
+			});
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			renderer.domElement.style.position = 'absolute';
+			renderer.domElement.style.marginLeft = '0px';
+			renderer.domElement.style.overflow = 'visible';
+			document.getElementById('container').appendChild(renderer.domElement);
+
+			// 鼠标控制
+			controls = new THREE.TrackballControls(camera, renderer.domElement);
+			// controls.rotateSpeed = 0.9;
+			controls.minDistance = 2500;
+			controls.maxDistance = 2500;
+			controls.addEventListener('change', render);
+
+			//切换到helix时的相机目标位置
+			var camera_tar = {
+				position: {
+					x: 0,
+					y: 0,
+					z: 1000
+				}
+			}
+			//切换到球型时的相机目标位置
+			var camera_tar1 = {
+				position: {
+					x: 0,
+					y: 0,
+					z: 1000
+				}
+			}
+			var ini = 0;
+			setInterval(function () {
+				var camera1 = camera;
+				ini = ini >= 2 ? 0 : ini;
+				++ini;
+				switch (ini) {
+					case 1:
+						transform(targets.helix, 2000);
+						animateCamera(camera_tar);
+						// console.log(camera.position)
+						$("#right").removeClass(_rightIn).addClass(_rightOut);
+						$("#left").removeClass(_leftIn).addClass(_leftOut);
+						setTimeout(() => {  //在切换到墙面的时候页面上执行的相关动画效果
+							$("#top").css("display", "block").removeClass(_topOut).addClass(_topIn);
+							$('#iframe').css("opacity", "1").addClass(_topIn);
+						}, 3200);
+						var b = Math.floor(Math.random()*100);  
+						console.log(personArray[b].id)  
+						break;
+					case 2:
+						transform(targets.sphere, 4000);
+						animateCamera(camera_tar1)
+						// console.log(camera.position)
+						setTimeout(function () {
+							$("#right").removeClass(_rightOut).addClass(_rightIn);
+							$("#left").removeClass(_leftOut).addClass(_leftIn);
+						}, 3000)
+						setTimeout(() => {
+							$("#top").removeClass(_topIn).fadeOut(1000)
+							$("#iframe").css("opacity", "0").removeClass(_topIn)
+						}, 1500)
+						break;
+				}
+			}, 10000); //动画变换间隔时间
+
+			function a() {
+				transform(targets.sphere, 5000);
+			}
+			a();
+			window.addEventListener('resize', onWindowResize, false);
+		}
+
+		// 场景切换的补间动画
+		// current1 相机当前的位置
+		// target1 相机的目标位置
+		function animateCamera(target1) {
+			// TWEEN.removeAll();
+			// console.log(camera.position)
+			// console.log(target1)
+			var tween = new TWEEN.Tween(camera.position)
+			tween.to({
+					x: target1.position.x,
+					y: target1.position.y,
+					z: target1.position.z
+				}, 5000)
+				.onUpdate(function () {
+					camera.position.set(this.x, this.y, this.z);
+					// console.log(this.z);
+				})
+				.onComplete(function () { //场景切换时的回调函数
+					// console.log(camera.position.z)
+				})
+				.easing(TWEEN.Easing.Exponential.InOut) //转场动画中的平滑补间动画
+				.start();
+		}
+		//初始化时的动画到位动画
+		function transform(targets, duration) {
+			// TWEEN.removeAll();
+			for (var i = 0; i < objects.length; i++) {
+
+				var object = objects[i];
+				var target = targets[i];
+
+				new TWEEN.Tween(object.position)
+					.to({
+						x: target.position.x,
+						y: target.position.y,
+						z: target.position.z
+					}, Math.random() * duration + duration)
+					.easing(TWEEN.Easing.Exponential.InOut)
+					.start();
+
+				new TWEEN.Tween(object.rotation)
+					.to({
+						x: target.rotation.x,
+						y: target.rotation.y,
+						z: target.rotation.z
+					}, Math.random() * duration + duration)
+					.easing(TWEEN.Easing.Exponential.InOut)
+					.start();
+			}
+		}
+
+		function onWindowResize() {
+
+			camera.aspect = window.innerWidth / window.innerHeight;
+			camera.updateProjectionMatrix();
+
+			renderer.setSize(window.innerWidth, window.innerHeight);
+
+			render();
+
+		}
+
+		function animate() {
+
+			// 让场景通过x轴或者y轴旋转  & z
+			// scene.rotation.x += 0.001;
+			scene.rotation.y += 0.0011;
+
+			requestAnimationFrame(animate);
+
+			TWEEN.update();
+
+			// controls.update();
+
+			// 渲染循环
+			render();
+
+		}
+
+		function render() {
+			// requestAnimationFrame(render);
+			renderer.render(scene, camera);
+
+		}
+	</script>
+
+</body>
+
+</html>

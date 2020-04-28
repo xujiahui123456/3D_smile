@@ -1,0 +1,12 @@
+body {
+margin: 0;
+    overflow: hidden;
+    background-color:Transparent;
+}
+
+#webgl-output{
+    background: rgba(0, 0, 0, 0)
+}
+canvas{
+    background: rgba(0, 0, 0, 0)
+}

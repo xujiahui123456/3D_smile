@@ -1,0 +1,201 @@
+*{
+    margin: 0;
+    padding: 0
+}
+html,
+body {
+    width: 2736px;
+    height: 1216px;
+}
+
+body {
+    background: url("../img/bg.jpg") no-repeat;
+    z-index: 1;
+    /* background-size: 100%100%; */
+    /* margin: 0; */
+    /* font-family: Helvetica, sans-serif; */
+    /* overflow: hidden; */
+}
+
+a {
+    color: #ffffff;
+}
+
+#info {
+    position: absolute;
+    width: 100%;
+    color: #ffffff;
+    padding: 5px;
+    font-family: Monospace;
+    font-size: 13px;
+    font-weight: bold;
+    text-align: center;
+    z-index: 1;
+}
+
+.element {
+    width: 170px;
+    /* 120 160 */
+    height: 170px;
+    box-shadow: 0px 0px 12px rgba(127, 255, 255, 0.75);
+    border: 0px solid #102A7B;
+    text-align: center;
+    cursor: default;
+    border-radius: 30px;
+}
+
+.element:hover {
+    box-shadow: 0px 0px 12px rgba(127, 255, 255, 0.75);
+    border: 1px solid rgba(127, 255, 255, 0.75);
+}
+
+.element img {
+    width: 170px;
+    height: 170px;
+    border-radius: 30px;
+}
+
+.element .number {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 12px;
+    color: rgba(127, 255, 255, 0.75);
+}
+
+.element .symbol {
+    position: absolute;
+    top: 40px;
+    left: 0px;
+    right: 0px;
+    font-size: 60px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.75);
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.95);
+}
+
+.element .details {
+    position: absolute;
+    bottom: 15px;
+    left: 0px;
+    right: 0px;
+    font-size: 12px;
+    color: rgba(127, 255, 255, 0.75);
+}
+
+.show_info {
+    position: fixed;
+    background-color: rgba(0, 0, 0, .6);
+    padding: 10px;
+    width: 400px;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    border-radius: 5px;
+    box-shadow: 0 0 10px 0 #FFC8C9;
+    top: 30%;
+}
+
+.show_info img {
+    display: block;
+    margin: auto;
+    border-radius: 5px;
+    box-shadow: 0 0 10px 0 #FFC8C9;
+    width: 400px;
+    height: 400px;
+}
+
+/* #container  div:nth-child(1) {
+    width: 2736px;
+    height: 1216px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    margin-left:0px
+} */
+
+
+#border{
+    width: 2736px;
+    height: 1216px;
+    background: url(../img/border.png) no-repeat center 100%;
+    z-index: 2px;
+    display: none
+}
+
+#left{
+    /* position: relative; */
+    width: 50%;
+    height: 100%;
+    float: left;
+    background: url(../img/border_left.png) no-repeat;
+    background-position:center;
+    display: none;
+    /* background: url(../img/textbg.png) no-repeat 20% 50% */
+}
+
+#leftText{
+    height: 100%;
+    width: 100%;
+    margin-left: 5%;
+    background: url(../img/textbg.png) no-repeat;
+    background-position: 10% 60%;
+    z-index: 1;
+}
+
+#right{
+    position: relative;
+    width: 50%;
+    height: 100%;
+    float: left;
+    background: url(../img/border_right.png) no-repeat;
+    background-position: center;
+    display: none
+}
+
+#ccbLogo{
+    height: 30%;
+    width: 100%;
+    background: url(../img/ccb_logo.png) no-repeat 80% 95%;
+    z-index: 1;
+    float: left;
+}
+
+#textbg_right{
+    height: 30%;
+    width: 100%;
+    float: left;
+    background: url(../img/textbg_right.png) no-repeat  85% 10%;
+    background-size: 40%30%
+}
+
+#fiveG_bg{
+    height: 30%;
+    width: 100%;
+    float: left;
+    background: url(../img/5G.png) no-repeat 70% 95%;
+    /* background-size: 110%110% */
+}
+
+#top{
+    position: absolute;
+    height: 20%;
+    width: 100%;
+    background: url(../img/ccb_logo.png) no-repeat 50% 20%;
+    display: none
+}
+
+#logo_3d{
+    height: 100%;
+    width: 100%
+}
+
+iframe{
+    position: absolute;
+    margin-top: 300px;
+    width: 2736px;
+    height: 1216px;
+    /* display: none; */
+    opacity: 0;
+    /* background: rgba(0, 0, 0, 0) */
+}

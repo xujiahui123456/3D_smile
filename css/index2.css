@@ -1,0 +1,51 @@
+*,html,body{
+    margin: 0;
+    padding: 0;
+}
+
+#container{
+    width: 5480px;
+    height: 1216px;
+    /* overflow: hidden; */
+}
+
+.showWindow{
+    width: 2736px;
+    height: 1216px;
+    /* overflow: hidden; */
+}
+
+.showContent{
+    width: 5480px;
+    height: 1216px;
+}
+
+.showContent_1{
+    position: absolute;
+    width: 2740px;
+    height: 1216px;
+    background-color: #444;
+    /* margin-left: 0px; */
+    left: 0px;
+    columns: 15;
+    column-gap: 50px
+}
+.showContent_2{
+    position: absolute;
+    width: 2740px;
+    height: 1216px;
+    background-color: #999;
+    /* display: block; */
+    left:0;
+    top: 0
+}
+
+
+.showContent_1 > div {
+    break-inside: avoid
+}
+
+.showContent_1 > div > img{
+    width: 180px;
+    height: 180px;
+}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Example 06.05 - Extrude SVG</title>
+    <script type="text/javascript" charset="UTF-8" src="./libs/three/three.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="./libs/three/controls/TrackballControls.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="./libs/other/d3-threeD.js"></script>
+    <script type="text/javascript" src="./js/Stats.js"></script>
+    <script type="text/javascript" src="./js/dat.gui.js"></script>
+
+    <script type="text/javascript" src="./libs/three/util.js"></script>
+    <script type="text/javascript" src="./js/youtest.js"></script>
+    <link rel="stylesheet" href="./css/default.css">
+</head>
+
+<body>
+    <div id="batman" style="display:none">
+        <svg version="1.0" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1152px"
+            height="1152px" xml:space="preserve">
+            <g>
+                <path id="batman-path" style="fill:rgb(0,0,0);" d="M173,78.3l-57.6-57.4C103.5,8.9,89.1,9.7,84.1,10.5C38.8,17.9,4.3,57.2,4.3,104.6C4.3,157.3,47,200,99.6,200c51.4,0,93.4-41,95.3-92c0-0.6-0.2-2.3-1.4-3.1c-1.5-0.9-4.5-0.6-4.5-0.6h-36.9c0,0-3.5,0-4.6,0.5c-0.7,0.3-1.7,1.1-1.7,1.1l-45,45c-0.7,0.7-1.9,0.7-2.6,0l-45.2-45.2c-0.7-0.7-0.7-1.9,0-2.6l45.2-45.2c0.7-0.7,1.9-0.7,2.6,0c0,0,0,0,0,0l41.5,41.5c0,0,2.2,1.9,4.2,2.5c1.9,0.5,4.7-1.4,4.7-1.4L173,78.3z M194,48.8l-30.9-30.7C128.6-15.2,88.8,7.7,88.8,7.7s16.9-9.1,38.6,13.7l51,51.2l15.1-14.9c0,0,1.8-2.3,2.2-4.3C196.1,51.5,194,48.8,194,48.8z"
+                />
+            </g>
+
+        </svg>
+    </div>
+
+    <div id="webgl-output">
+        <script type="text/javascript">
+            (function () {
+                // your page initialization code here
+                // the DOM will be available here
+                init()
+            })();
+        </script>
+</body>
+
+
+</html>
